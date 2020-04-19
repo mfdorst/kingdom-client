@@ -7,11 +7,10 @@ struct Message {
 
 fn main() -> reqwest::Result<()> {
   let url = "http://localhost:9000";
-
-  println!("GET {}", url);
-
   let message: Message = reqwest::blocking::get(url)?.json()?;
-
-  println!("{:?}", message);
+  println!("GET {} - Response: {:?}", url, message);
+  let client = reqwest::blocking::Client::new();
+  let response = client.post(url).json(&message).send()?.text()?;
+  println!("POST {:?} to {} - Response: {:?}", message, url, response);
   Ok(())
 }
